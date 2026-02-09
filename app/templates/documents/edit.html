@@ -1,0 +1,55 @@
+{% extends "base_app.html" %}
+{% from "_macros.html" import render_field, render_select %}
+
+{% block title %}Edit: {{ document.title }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><span class="lang-en">Edit Document</span><span class="lang-ar">تعديل الوثيقة</span></h1>
+    <p class="text-muted"><span class="lang-en">Editing:</span><span class="lang-ar">تعديل:</span> {{ document.title }}</p>
+</div>
+
+<div class="form-card">
+    <form method="POST" action="{{ url_for('documents.edit', doc_id=document.id) }}" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        {{ render_field(form.title) }}
+        {{ render_field(form.description) }}
+        {{ render_select(form.classification_level) }}
+
+        <div class="form-group">
+            {{ form.compartments.label(class="form-label") }}
+            <div class="checkbox-group">
+                {% for subfield in form.compartments %}
+                <div class="form-check">
+                    {{ subfield() }} {{ subfield.label() }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form.dissemination_controls.label(class="form-label") }}
+            <div class="checkbox-group">
+                {% for subfield in form.dissemination_controls %}
+                <div class="form-check">
+                    {{ subfield() }} {{ subfield.label() }}
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="form-group">
+            {{ form.file.label(class="form-label") }}
+            {{ form.file(class="form-control-file") }}
+            <small class="form-text"><span class="lang-en">Current file: {{ document.file_name }} ({{ (document.file_size / 1024)|round(1) }} KB). Leave empty to keep current file.</span><span class="lang-ar">الملف الحالي: {{ document.file_name }} ({{ (document.file_size / 1024)|round(1) }} KB). اتركه فارغاً للإبقاء على الملف الحالي.</span></small>
+        </div>
+
+        {{ render_field(form.change_summary) }}
+
+        <div class="form-group">
+            {{ form.submit(class="btn btn-primary") }}
+            <a href="{{ url_for('documents.detail', doc_id=document.id) }}" class="btn btn-secondary"><span class="lang-en">Cancel</span><span class="lang-ar">إلغاء</span></a>
+        </div>
+    </form>
+</div>
+{% endblock %}

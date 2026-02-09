@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error{% endblock %}
+
+{% block content %}
+<div class="error-page">
+    <h1><span class="lang-en">500 - Internal Server Error</span><span class="lang-ar">500 - خطأ داخلي في الخادم</span></h1>
+    <p><span class="lang-en">An unexpected error occurred. The incident has been logged.</span><span class="lang-ar">حدث خطأ غير متوقع. تم تسجيل الحادثة.</span></p>
+    <a href="{{ url_for('documents.index') if current_user.is_authenticated else url_for('auth.login') }}" class="btn btn-primary">
+        <span class="lang-en">Go Back</span><span class="lang-ar">العودة</span>
+    </a>
+</div>
+{% endblock %}

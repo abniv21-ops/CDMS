@@ -1,0 +1,75 @@
+{% extends "base_app.html" %}
+{% from "_macros.html" import classification_badge %}
+{% from "_classification_banner.html" import classification_banner %}
+
+{% block title %}Documents{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><span class="lang-en">Documents</span><span class="lang-ar">الوثائق</span></h1>
+    {% if current_user.role in ['analyst', 'admin'] %}
+    <a href="{{ url_for('documents.upload') }}" class="btn btn-gold">&#9733; <span class="lang-en">Upload Document</span><span class="lang-ar">رفع وثيقة</span></a>
+    {% endif %}
+</div>
+
+<!-- Stats chips -->
+{% if documents %}
+<div class="doc-stats-bar">
+    <div class="doc-stat-chip">
+        <div class="chip-value">{{ documents|length }}</div>
+        <div class="chip-label"><span class="lang-en">Total</span><span class="lang-ar">الإجمالي</span></div>
+    </div>
+    {% set ts_count = documents|selectattr('classification_level', 'equalto', 3)|list|length %}
+    {% set s_count = documents|selectattr('classification_level', 'equalto', 2)|list|length %}
+    {% set c_count = documents|selectattr('classification_level', 'equalto', 1)|list|length %}
+    {% set u_count = documents|selectattr('classification_level', 'equalto', 0)|list|length %}
+    {% if ts_count %}<div class="doc-stat-chip" style="border-top: 3px solid #ff8c00;"><div class="chip-value">{{ ts_count }}</div><div class="chip-label"><span class="lang-en">Top Secret</span><span class="lang-ar">سري للغاية</span></div></div>{% endif %}
+    {% if s_count %}<div class="doc-stat-chip" style="border-top: 3px solid #c8102e;"><div class="chip-value">{{ s_count }}</div><div class="chip-label"><span class="lang-en">Secret</span><span class="lang-ar">سري</span></div></div>{% endif %}
+    {% if c_count %}<div class="doc-stat-chip" style="border-top: 3px solid #0033a0;"><div class="chip-value">{{ c_count }}</div><div class="chip-label"><span class="lang-en">Confidential</span><span class="lang-ar">محدود</span></div></div>{% endif %}
+    {% if u_count %}<div class="doc-stat-chip" style="border-top: 3px solid #007a33;"><div class="chip-value">{{ u_count }}</div><div class="chip-label"><span class="lang-en">Unclassified</span><span class="lang-ar">غير مصنف</span></div></div>{% endif %}
+</div>
+
+<!-- Filter chips -->
+<div class="filter-chips" id="filterChips">
+    <a href="#" class="filter-chip active" data-filter="all"><span class="lang-en">All</span><span class="lang-ar">الكل</span></a>
+    <a href="#" class="filter-chip" data-filter="3"><span class="lang-en">Top Secret</span><span class="lang-ar">سري للغاية</span></a>
+    <a href="#" class="filter-chip" data-filter="2"><span class="lang-en">Secret</span><span class="lang-ar">سري</span></a>
+    <a href="#" class="filter-chip" data-filter="1"><span class="lang-en">Confidential</span><span class="lang-ar">محدود</span></a>
+    <a href="#" class="filter-chip" data-filter="0"><span class="lang-en">Unclassified</span><span class="lang-ar">غير مصنف</span></a>
+</div>
+{% endif %}
+
+{% if documents %}
+<div class="documents-grid" id="documentsGrid">
+    {% for doc in documents %}
+    <div class="document-card" data-classification="{{ doc.classification_level }}">
+        <div class="document-card-header classification-bg-{{ doc.classification_css }}">
+            {{ doc.classification_string or doc.classification_display }}
+        </div>
+        <div class="document-card-body">
+            <h3><a href="{{ url_for('documents.detail', doc_id=doc.id) }}">{{ doc.title }}</a></h3>
+            {% if doc.description %}
+            <p class="document-desc">{{ doc.description[:150] }}{% if doc.description|length > 150 %}...{% endif %}</p>
+            {% endif %}
+            <div class="document-meta">
+                <span><span class="lang-en">By:</span><span class="lang-ar">بواسطة:</span> {{ doc.author.username }}</span>
+                <span><span class="lang-en">Version:</span><span class="lang-ar">الإصدار:</span> {{ doc.current_version }}</span>
+                <span>{{ doc.updated_at.strftime('%Y-%m-%d %H:%M') }}</span>
+            </div>
+            {% if doc.compartments %}
+            <div class="document-compartments">
+                {% for comp in doc.compartments %}
+                <span class="badge badge-compartment">{{ comp.name }}</span>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p><span class="lang-en">No documents available at your clearance level.</span><span class="lang-ar">لا توجد وثائق متاحة عند مستوى تصريحك.</span></p>
+</div>
+{% endif %}
+{% endblock %}

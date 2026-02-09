@@ -1,0 +1,52 @@
+{% extends "base_app.html" %}
+
+{% block title %}Compartments: {{ user.username }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><span class="lang-en">Manage Compartments</span><span class="lang-ar">إدارة الأقسام</span></h1>
+    <p class="text-muted"><span class="lang-en">User:</span><span class="lang-ar">المستخدم:</span> {{ user.username }} ({{ user.clearance_display }} / {{ user.role }})</p>
+    <a href="{{ url_for('admin.users_list') }}" class="btn btn-secondary"><span class="lang-en">Back to Users</span><span class="lang-ar">العودة للمستخدمين</span></a>
+</div>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th><span class="lang-en">Compartment</span><span class="lang-ar">القسم</span></th>
+            <th><span class="lang-en">Full Name</span><span class="lang-ar">الاسم الكامل</span></th>
+            <th><span class="lang-en">Description</span><span class="lang-ar">الوصف</span></th>
+            <th><span class="lang-en">Status</span><span class="lang-ar">الحالة</span></th>
+            <th><span class="lang-en">Action</span><span class="lang-ar">الإجراء</span></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for comp in all_compartments %}
+        <tr>
+            <td><span class="badge badge-compartment">{{ comp.name }}</span></td>
+            <td>{{ comp.display_name }}</td>
+            <td>{{ comp.description }}</td>
+            <td>
+                {% if comp.id in user_comps %}
+                <span class="badge badge-active"><span class="lang-en">Granted</span><span class="lang-ar">ممنوح</span></span>
+                {% else %}
+                <span class="badge badge-inactive"><span class="lang-en">Not Granted</span><span class="lang-ar">غير ممنوح</span></span>
+                {% endif %}
+            </td>
+            <td>
+                <form method="POST" class="inline-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <input type="hidden" name="compartment_id" value="{{ comp.id }}">
+                    {% if comp.id in user_comps %}
+                    <input type="hidden" name="action" value="revoke">
+                    <button type="submit" class="btn btn-sm btn-danger"><span class="lang-en">Revoke</span><span class="lang-ar">إلغاء</span></button>
+                    {% else %}
+                    <input type="hidden" name="action" value="grant">
+                    <button type="submit" class="btn btn-sm btn-success"><span class="lang-en">Grant</span><span class="lang-ar">منح</span></button>
+                    {% endif %}
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

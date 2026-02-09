@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Access Denied{% endblock %}
+
+{% block content %}
+<div class="error-page">
+    <h1><span class="lang-en">403 - Access Denied</span><span class="lang-ar">403 - تم رفض الوصول</span></h1>
+    <p><span class="lang-en">You do not have the required clearance or permissions to access this resource.</span><span class="lang-ar">لا تملك التصريح أو الصلاحيات المطلوبة للوصول إلى هذا المورد.</span></p>
+    <p><span class="lang-en">This access attempt has been logged.</span><span class="lang-ar">تم تسجيل محاولة الوصول هذه.</span></p>
+    <a href="{{ url_for('documents.index') if current_user.is_authenticated else url_for('auth.login') }}" class="btn btn-primary">
+        <span class="lang-en">Return to Safety</span><span class="lang-ar">العودة للأمان</span>
+    </a>
+</div>
+{% endblock %}

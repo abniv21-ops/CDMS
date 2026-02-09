@@ -1,0 +1,71 @@
+<!-- Sidebar Navigation -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-section">
+        <div class="sidebar-heading"><span class="lang-en">Navigation</span><span class="lang-ar">التنقل</span></div>
+        <ul class="sidebar-nav">
+            <li>
+                <a href="{{ url_for('documents.index') }}" class="{% if request.endpoint == 'documents.index' %}active{% endif %}">
+                    <span class="nav-icon">&#128196;</span> <span class="lang-en">Documents</span><span class="lang-ar">الوثائق</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('documents.search') }}" class="{% if request.endpoint == 'documents.search' %}active{% endif %}">
+                    <span class="nav-icon">&#128269;</span> <span class="lang-en">Search</span><span class="lang-ar">بحث</span>
+                </a>
+            </li>
+            {% if current_user.role in ['analyst', 'admin'] %}
+            <li>
+                <a href="{{ url_for('documents.upload') }}" class="{% if request.endpoint == 'documents.upload' %}active{% endif %}">
+                    <span class="nav-icon">&#128228;</span> <span class="lang-en">Upload</span><span class="lang-ar">رفع</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+
+    {% if current_user.is_admin %}
+    <div class="sidebar-section">
+        <div class="sidebar-heading"><span class="lang-en">Administration</span><span class="lang-ar">الإدارة</span></div>
+        <ul class="sidebar-nav">
+            <li>
+                <a href="{{ url_for('admin.dashboard') }}" class="{% if request.endpoint == 'admin.dashboard' %}active{% endif %}">
+                    <span class="nav-icon">&#128202;</span> <span class="lang-en">Dashboard</span><span class="lang-ar">لوحة التحكم</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('admin.users_list') }}" class="{% if request.endpoint and 'admin.user' in request.endpoint %}active{% endif %}">
+                    <span class="nav-icon">&#128101;</span> <span class="lang-en">Users</span><span class="lang-ar">المستخدمون</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('audit.log_viewer') }}" class="{% if request.endpoint == 'audit.log_viewer' %}active{% endif %}">
+                    <span class="nav-icon">&#128203;</span> <span class="lang-en">Audit Log</span><span class="lang-ar">سجل التدقيق</span>
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('admin.statistics') }}" class="{% if request.endpoint == 'admin.statistics' %}active{% endif %}">
+                    <span class="nav-icon">&#128200;</span> <span class="lang-en">Statistics</span><span class="lang-ar">الإحصائيات</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    {% endif %}
+
+    <div class="sidebar-footer">
+        <div class="sidebar-clearance">
+            <span class="clearance-label"><span class="lang-en">Your Clearance</span><span class="lang-ar">تصريحك الأمني</span></span>
+            <span class="classification-badge {{ ClassificationLevel(current_user.clearance_level).css_class }}">
+                {{ current_user.clearance_display }}
+            </span>
+        </div>
+        <div class="sidebar-role">{{ current_user.role|upper }}</div>
+        <div class="sidebar-session">
+            <span class="session-label"><span class="lang-en">Session:</span><span class="lang-ar">الجلسة:</span></span>
+            <span class="session-timer" id="sessionTimer">00:00:00</span>
+        </div>
+    </div>
+</aside>
+
+<!-- Mobile overlay & toggle -->
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<button class="sidebar-toggle" id="sidebarToggle" aria-label="Toggle sidebar">&#9776;</button>

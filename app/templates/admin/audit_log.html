@@ -1,0 +1,71 @@
+{% extends "base_app.html" %}
+{% from "_macros.html" import pagination_widget %}
+
+{% block title %}Audit Log{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1>{% if trail_title is defined and trail_title %}{{ trail_title }}{% else %}<span class="lang-en">Audit Log</span><span class="lang-ar">سجل التدقيق</span>{% endif %}</h1>
+    <div class="header-actions">
+        <a href="{{ url_for('audit.verify') }}" class="btn btn-secondary"><span class="lang-en">Verify Integrity</span><span class="lang-ar">التحقق من السلامة</span></a>
+        <a href="{{ url_for('audit.export_csv') }}" class="btn btn-secondary"><span class="lang-en">Export CSV</span><span class="lang-ar">تصدير CSV</span></a>
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary"><span class="lang-en">Dashboard</span><span class="lang-ar">لوحة التحكم</span></a>
+    </div>
+</div>
+
+{% if actions %}
+<div class="filter-bar">
+    <form method="GET" action="{{ url_for('audit.log_viewer') }}" class="form-inline">
+        <select name="action" class="form-select">
+            <option value=""><span class="lang-en">All Actions</span></option>
+            {% for action in actions %}
+            <option value="{{ action }}" {% if action == current_action %}selected{% endif %}>{{ action }}</option>
+            {% endfor %}
+        </select>
+        <input type="text" name="user" class="form-control" placeholder="Filter by username..." value="{{ current_user_filter }}">
+        <button type="submit" class="btn btn-primary"><span class="lang-en">Filter</span><span class="lang-ar">تصفية</span></button>
+        <a href="{{ url_for('audit.log_viewer') }}" class="btn btn-secondary"><span class="lang-en">Clear</span><span class="lang-ar">مسح</span></a>
+    </form>
+</div>
+{% endif %}
+
+<table class="data-table audit-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th><span class="lang-en">Timestamp</span><span class="lang-ar">الطابع الزمني</span></th>
+            <th><span class="lang-en">User</span><span class="lang-ar">المستخدم</span></th>
+            <th><span class="lang-en">Action</span><span class="lang-ar">الإجراء</span></th>
+            <th><span class="lang-en">Resource</span><span class="lang-ar">المورد</span></th>
+            <th><span class="lang-en">Details</span><span class="lang-ar">التفاصيل</span></th>
+            <th><span class="lang-en">IP Address</span><span class="lang-ar">عنوان IP</span></th>
+            <th><span class="lang-en">Hash (first 12)</span><span class="lang-ar">البصمة (أول 12)</span></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in entries %}
+        <tr>
+            <td>{{ entry.id }}</td>
+            <td>{{ entry.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+            <td>{{ entry.username or '-' }}</td>
+            <td><span class="badge badge-action">{{ entry.action }}</span></td>
+            <td>{{ entry.resource_type or '-' }}{% if entry.resource_id %} #{{ entry.resource_id }}{% endif %}</td>
+            <td class="details-cell">
+                {% if entry.details %}
+                <details>
+                    <summary><span class="lang-en">View</span><span class="lang-ar">عرض</span></summary>
+                    <pre>{{ entry.details }}</pre>
+                </details>
+                {% else %}-{% endif %}
+            </td>
+            <td>{{ entry.ip_address or '-' }}</td>
+            <td class="hash-display">{{ entry.entry_hash[:12] }}...</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if pagination %}
+{{ pagination_widget(pagination) }}
+{% endif %}
+{% endblock %}

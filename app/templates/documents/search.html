@@ -1,0 +1,51 @@
+{% extends "base_app.html" %}
+{% from "_macros.html" import render_field, render_select %}
+
+{% block title %}Search Documents{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><span class="lang-en">Search Documents</span><span class="lang-ar">بحث في الوثائق</span></h1>
+</div>
+
+<div class="search-form-container">
+    <form method="POST" action="{{ url_for('documents.search') }}">
+        {{ form.hidden_tag() }}
+        <div class="search-row">
+            {{ form.query(class="form-control", placeholder="Search by title, description, or filename...") }}
+            {{ form.classification(class="form-select") }}
+            {{ form.submit(class="btn btn-primary") }}
+        </div>
+    </form>
+</div>
+
+{% if documents %}
+<p class="results-count">{{ documents|length }} <span class="lang-en">document(s) found</span><span class="lang-ar">وثيقة (وثائق) تم العثور عليها</span></p>
+<table class="data-table">
+    <thead>
+        <tr>
+            <th><span class="lang-en">Classification</span><span class="lang-ar">التصنيف</span></th>
+            <th><span class="lang-en">Title</span><span class="lang-ar">العنوان</span></th>
+            <th><span class="lang-en">Author</span><span class="lang-ar">المؤلف</span></th>
+            <th><span class="lang-en">Version</span><span class="lang-ar">الإصدار</span></th>
+            <th><span class="lang-en">Last Modified</span><span class="lang-ar">آخر تعديل</span></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for doc in documents %}
+        <tr>
+            <td><span class="classification-badge {{ doc.classification_css }}">{{ doc.classification_display }}</span></td>
+            <td><a href="{{ url_for('documents.detail', doc_id=doc.id) }}">{{ doc.title }}</a></td>
+            <td>{{ doc.author.username }}</td>
+            <td>v{{ doc.current_version }}</td>
+            <td>{{ doc.updated_at.strftime('%Y-%m-%d %H:%M') }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% elif request.method == 'POST' %}
+<div class="empty-state">
+    <p><span class="lang-en">No documents match your search criteria at your clearance level.</span><span class="lang-ar">لا توجد وثائق تطابق معايير البحث عند مستوى تصريحك.</span></p>
+</div>
+{% endif %}
+{% endblock %}

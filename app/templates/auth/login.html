@@ -1,0 +1,69 @@
+{% extends "base_auth.html" %}
+{% from "_macros.html" import render_field, render_checkbox %}
+{% from "components/_seal.html" import gov_seal %}
+
+{% block title %}Login{% endblock %}
+
+{% block auth_content %}
+<div class="login-split">
+    <!-- Left: Navy Branding Panel -->
+    <div class="login-left">
+        <div class="seal-container">
+            {{ gov_seal(140) }}
+        </div>
+        <div class="gov-title"><span class="lang-en">United States Government</span><span class="lang-ar">حكومة الولايات المتحدة</span></div>
+        <div class="system-name"><span class="lang-en">Classified Documents<br>Management System</span><span class="lang-ar">نظام إدارة<br>الوثائق المصنفة</span></div>
+        <div class="system-abbr">CDMS</div>
+        <div class="monitor-notice">
+            <span class="lang-en">&ldquo;All access to this system is monitored, recorded, and subject to audit.&rdquo;</span><span class="lang-ar">&ldquo;جميع عمليات الوصول إلى هذا النظام مراقبة ومسجلة وخاضعة للتدقيق.&rdquo;</span>
+        </div>
+    </div>
+
+    <!-- Right: Login Form Panel -->
+    <div class="login-right">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" style="max-width:460px;width:100%;margin-bottom:12px;">
+                        {{ message }}
+                        <button class="alert-close" onclick="this.parentElement.remove()">&times;</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="login-security-warning">
+            <strong>&#9888; <span class="lang-en">Security Notice</span><span class="lang-ar">إشعار أمني</span></strong>
+            <span class="lang-en">You are accessing a U.S. Government information system. This system is provided for authorized use only.
+            Unauthorized access or use may subject you to criminal prosecution and penalties.
+            All activity on this system is monitored and logged.</span><span class="lang-ar">أنت تصل إلى نظام معلومات حكومي أمريكي. هذا النظام مخصص للاستخدام المصرح به فقط.
+            الوصول أو الاستخدام غير المصرح به قد يعرضك للملاحقة الجنائية والعقوبات.
+            جميع الأنشطة على هذا النظام مراقبة ومسجلة.</span>
+        </div>
+
+        <div class="login-form-card">
+            <h2><span class="star">&#9733;</span> <span class="lang-en">Sign In</span><span class="lang-ar">تسجيل الدخول</span></h2>
+
+            <form method="POST" action="{{ url_for('auth.login') }}">
+                {{ form.hidden_tag() }}
+                {{ render_field(form.username) }}
+                {{ render_field(form.password) }}
+                {{ render_checkbox(form.remember_me) }}
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-gold btn-block") }}
+                </div>
+            </form>
+
+            <p class="auth-link">
+                <span class="lang-en">Don't have an account? <a href="{{ url_for('auth.register') }}">Register here</a></span><span class="lang-ar">ليس لديك حساب؟ <a href="{{ url_for('auth.register') }}">سجّل هنا</a></span>
+            </p>
+        </div>
+
+        <div class="demo-credentials">
+            <strong class="demo-title"><span class="lang-en">Demo Credentials</span><span class="lang-ar">بيانات تجريبية</span></strong>
+            <span class="demo-label"><span class="lang-en">Username:</span><span class="lang-ar">اسم المستخدم:</span></span> <strong>admin</strong><br>
+            <span class="demo-label"><span class="lang-en">Password:</span><span class="lang-ar">كلمة المرور:</span></span> <strong>ChangeMe123!</strong>
+        </div>
+    </div>
+</div>
+{% endblock %}

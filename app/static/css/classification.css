@@ -1,0 +1,86 @@
+/* ============================================================
+   Classification Banners & Badges — DOD Standard Colors
+   ============================================================ */
+
+/* === Classification Banners === */
+.classification-banner {
+    text-align: center;
+    padding: 4px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #000;
+}
+.classification-banner.unclassified {
+    background-color: #007a33;
+    color: #fff;
+}
+.classification-banner.confidential {
+    background-color: #0033a0;
+    color: #fff;
+}
+.classification-banner.secret {
+    background-color: #c8102e;
+    color: #fff;
+}
+.classification-banner.top-secret {
+    background-color: #ff8c00;
+    color: #000;
+}
+
+/* === Classification Badges === */
+.classification-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.classification-badge.unclassified,
+.badge-unclassified {
+    background-color: rgba(0, 122, 51, 0.12);
+    color: #007a33;
+    border: 1px solid rgba(0, 122, 51, 0.35);
+}
+
+.classification-badge.confidential,
+.badge-confidential {
+    background-color: rgba(0, 51, 160, 0.12);
+    color: #0033a0;
+    border: 1px solid rgba(0, 51, 160, 0.35);
+}
+
+.classification-badge.secret,
+.badge-secret {
+    background-color: rgba(200, 16, 46, 0.12);
+    color: #c8102e;
+    border: 1px solid rgba(200, 16, 46, 0.35);
+}
+
+.classification-badge.top-secret,
+.badge-top-secret {
+    background-color: rgba(255, 140, 0, 0.15);
+    color: #c87000;
+    border: 1px solid rgba(255, 140, 0, 0.4);
+}
+
+/* === Classification Card Header Backgrounds === */
+.classification-bg-unclassified {
+    background-color: #007a33;
+    color: #fff;
+}
+.classification-bg-confidential {
+    background-color: #0033a0;
+    color: #fff;
+}
+.classification-bg-secret {
+    background-color: #c8102e;
+    color: #fff;
+}
+.classification-bg-top-secret {
+    background-color: #ff8c00;
+    color: #000;
+}

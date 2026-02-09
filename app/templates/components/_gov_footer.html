@@ -1,0 +1,19 @@
+<!-- Government Footer -->
+<footer class="gov-footer">
+    <div class="gov-footer-content">
+        <div>
+            <span class="lang-en">Classified Documents Management System (CDMS)</span><span class="lang-ar">نظام إدارة الوثائق المصنفة (CDMS)</span>
+            &nbsp;&bull;&nbsp;
+            <a href="{{ url_for('documents.index') }}"><span class="lang-en">Documents</span><span class="lang-ar">الوثائق</span></a>
+            {% if current_user.is_authenticated and current_user.is_admin %}
+            &nbsp;&bull;&nbsp;
+            <a href="{{ url_for('admin.dashboard') }}"><span class="lang-en">Admin</span><span class="lang-ar">الإدارة</span></a>
+            &nbsp;&bull;&nbsp;
+            <a href="{{ url_for('audit.log_viewer') }}"><span class="lang-en">Audit</span><span class="lang-ar">التدقيق</span></a>
+            {% endif %}
+        </div>
+        <div class="footer-monitoring">
+            <span class="lang-en">All access is monitored and logged per USG security policy.</span><span class="lang-ar">جميع عمليات الوصول مراقبة ومسجلة وفقاً لسياسة الأمن الحكومية.</span>
+        </div>
+    </div>
+</footer>

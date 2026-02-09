@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CDMS{% endblock %} - Classified Documents Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/classification.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/rtl.css') }}">
+    {% block extra_css %}{% endblock %}
+    <script>
+        (function(){
+            var t=localStorage.getItem('cdms-theme');
+            if(t==='dark') document.documentElement.setAttribute('data-theme','dark');
+            var l=localStorage.getItem('cdms-lang')||'en';
+            document.documentElement.setAttribute('data-lang',l);
+            document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');
+            document.documentElement.setAttribute('lang',l);
+        })();
+    </script>
+</head>
+<body>
+    {% block classification_banner_top %}
+    <div class="classification-banner top-secret">
+        <span class="lang-en">CLASSIFICATION LEVEL: TOP SECRET // SYSTEM HIGH</span><span class="lang-ar">مستوى التصنيف: سري للغاية // نظام عالي</span>
+    </div>
+    {% endblock %}
+
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">
+                        {{ message }}
+                        <button class="alert-close" onclick="this.parentElement.remove()">&times;</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="footer">
+        <p><span class="lang-en">Classified Documents Management System (CDMS) &mdash; All access is monitored and logged.</span><span class="lang-ar">نظام إدارة الوثائق المصنفة (CDMS) &mdash; جميع عمليات الوصول مراقبة ومسجلة.</span></p>
+    </footer>
+
+    {% block classification_banner_bottom %}
+    <div class="classification-banner top-secret">
+        <span class="lang-en">CLASSIFICATION LEVEL: TOP SECRET // SYSTEM HIGH</span><span class="lang-ar">مستوى التصنيف: سري للغاية // نظام عالي</span>
+    </div>
+    {% endblock %}
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}CDMS{% endblock %} - Classified Documents Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/classification.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login-page.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/rtl.css') }}">
+    <script>
+        (function() {
+            var saved = localStorage.getItem('cdms-theme');
+            if (saved === 'dark') document.documentElement.setAttribute('data-theme', 'dark');
+            var l=localStorage.getItem('cdms-lang')||'en';
+            document.documentElement.setAttribute('data-lang',l);
+            document.documentElement.setAttribute('dir',l==='ar'?'rtl':'ltr');
+            document.documentElement.setAttribute('lang',l);
+        })();
+    </script>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="login-page">
+        <!-- Top Classification Banner -->
+        <div class="classification-banner top-secret">
+            <span class="lang-en">CLASSIFICATION LEVEL: TOP SECRET // SYSTEM HIGH</span><span class="lang-ar">مستوى التصنيف: سري للغاية // نظام عالي</span>
+        </div>
+
+        <!-- Theme toggle (floating) -->
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode"
+                style="position:fixed;top:40px;right:16px;z-index:9999;">&#9790;</button>
+        <!-- Language toggle (floating) -->
+        <button class="lang-toggle" id="langToggle" title="Toggle language" aria-label="Toggle language"
+                style="position:fixed;top:40px;right:60px;z-index:9999;">AR</button>
+
+        {% block auth_content %}{% endblock %}
+
+        <!-- Bottom Classification Banner -->
+        <div class="classification-banner top-secret">
+            <span class="lang-en">CLASSIFICATION LEVEL: TOP SECRET // SYSTEM HIGH</span><span class="lang-ar">مستوى التصنيف: سري للغاية // نظام عالي</span>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            var btn = document.getElementById('themeToggle');
+            var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+            btn.innerHTML = isDark ? '&#9788;' : '&#9790;';
+            btn.title = isDark ? 'Switch to light mode' : 'Switch to dark mode';
+            btn.addEventListener('click', function() {
+                var current = document.documentElement.getAttribute('data-theme');
+                if (current === 'dark') {
+                    document.documentElement.removeAttribute('data-theme');
+                    localStorage.setItem('cdms-theme', 'light');
+                    this.innerHTML = '&#9790;';
+                    this.title = 'Switch to dark mode';
+                } else {
+                    document.documentElement.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('cdms-theme', 'dark');
+                    this.innerHTML = '&#9788;';
+                    this.title = 'Switch to light mode';
+                }
+            });
+        })();
+        (function() {
+            var langBtn = document.getElementById('langToggle');
+            var curLang = document.documentElement.getAttribute('data-lang') || 'en';
+            langBtn.textContent = curLang === 'ar' ? 'EN' : 'AR';
+            langBtn.addEventListener('click', function() {
+                var current = document.documentElement.getAttribute('data-lang') || 'en';
+                var next = current === 'ar' ? 'en' : 'ar';
+                document.documentElement.setAttribute('data-lang', next);
+                document.documentElement.setAttribute('dir', next === 'ar' ? 'rtl' : 'ltr');
+                document.documentElement.setAttribute('lang', next);
+                localStorage.setItem('cdms-lang', next);
+                this.textContent = next === 'ar' ? 'EN' : 'AR';
+            });
+        })();
+    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

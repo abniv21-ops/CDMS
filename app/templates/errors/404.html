@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Not Found{% endblock %}
+
+{% block content %}
+<div class="error-page">
+    <h1><span class="lang-en">404 - Not Found</span><span class="lang-ar">404 - غير موجود</span></h1>
+    <p><span class="lang-en">The requested resource does not exist or you do not have permission to view it.</span><span class="lang-ar">المورد المطلوب غير موجود أو لا تملك صلاحية لعرضه.</span></p>
+    <a href="{{ url_for('documents.index') if current_user.is_authenticated else url_for('auth.login') }}" class="btn btn-primary">
+        <span class="lang-en">Go Back</span><span class="lang-ar">العودة</span>
+    </a>
+</div>
+{% endblock %}

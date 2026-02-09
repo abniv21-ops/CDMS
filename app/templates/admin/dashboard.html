@@ -1,0 +1,76 @@
+{% extends "base_app.html" %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><span class="lang-en">Admin Dashboard</span><span class="lang-ar">لوحة تحكم المسؤول</span></h1>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-card">
+        <div class="stat-value">{{ total_users }}</div>
+        <div class="stat-label"><span class="lang-en">Total Users</span><span class="lang-ar">إجمالي المستخدمين</span></div>
+        <div class="stat-detail">{{ active_users }} <span class="lang-en">active</span><span class="lang-ar">نشط</span></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ total_documents }}</div>
+        <div class="stat-label"><span class="lang-en">Documents</span><span class="lang-ar">الوثائق</span></div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ total_audit_entries }}</div>
+        <div class="stat-label"><span class="lang-en">Audit Entries</span><span class="lang-ar">سجلات التدقيق</span></div>
+    </div>
+</div>
+
+<div class="dashboard-grid">
+    <div class="dashboard-section">
+        <h2><span class="lang-en">Documents by Classification</span><span class="lang-ar">الوثائق حسب التصنيف</span></h2>
+        <div class="classification-stats">
+            {% for level, count in doc_by_class.items() %}
+            <div class="class-stat-row">
+                <span class="classification-badge {{ level|lower|replace(' ', '-') }}">{{ level }}</span>
+                <span class="stat-count">{{ count }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="dashboard-section">
+        <h2><span class="lang-en">Quick Actions</span><span class="lang-ar">إجراءات سريعة</span></h2>
+        <div class="quick-actions">
+            <a href="{{ url_for('admin.users_list') }}" class="btn btn-secondary"><span class="lang-en">Manage Users</span><span class="lang-ar">إدارة المستخدمين</span></a>
+            <a href="{{ url_for('audit.log_viewer') }}" class="btn btn-secondary"><span class="lang-en">View Audit Log</span><span class="lang-ar">عرض سجل التدقيق</span></a>
+            <a href="{{ url_for('audit.verify') }}" class="btn btn-secondary"><span class="lang-en">Verify Integrity</span><span class="lang-ar">التحقق من السلامة</span></a>
+            <a href="{{ url_for('admin.statistics') }}" class="btn btn-secondary"><span class="lang-en">Full Statistics</span><span class="lang-ar">الإحصائيات الكاملة</span></a>
+            <a href="{{ url_for('audit.export_csv') }}" class="btn btn-secondary"><span class="lang-en">Export Audit CSV</span><span class="lang-ar">تصدير التدقيق CSV</span></a>
+        </div>
+    </div>
+</div>
+
+<div class="dashboard-section">
+    <h2><span class="lang-en">Recent Activity</span><span class="lang-ar">النشاط الأخير</span></h2>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th><span class="lang-en">Time</span><span class="lang-ar">الوقت</span></th>
+                <th><span class="lang-en">User</span><span class="lang-ar">المستخدم</span></th>
+                <th><span class="lang-en">Action</span><span class="lang-ar">الإجراء</span></th>
+                <th><span class="lang-en">Resource</span><span class="lang-ar">المورد</span></th>
+                <th><span class="lang-en">IP Address</span><span class="lang-ar">عنوان IP</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in recent_audit %}
+            <tr>
+                <td>{{ entry.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                <td>{{ entry.username or 'System' }}</td>
+                <td><span class="badge badge-action">{{ entry.action }}</span></td>
+                <td>{{ entry.resource_type }}{% if entry.resource_id %} #{{ entry.resource_id }}{% endif %}</td>
+                <td>{{ entry.ip_address }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

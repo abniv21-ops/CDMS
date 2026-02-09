@@ -1,0 +1,112 @@
+{% extends "base_app.html" %}
+{% from "_classification_banner.html" import classification_banner %}
+
+{% block title %}{{ document.title }}{% endblock %}
+
+{% block content %}
+{{ classification_banner(document.classification_level, document.classification_string) }}
+
+<div class="document-detail">
+    <div class="document-detail-header">
+        <h1>{{ document.title }}</h1>
+        <div class="document-actions">
+            <a href="{{ url_for('documents.download', doc_id=document.id) }}" class="btn btn-primary"><span class="lang-en">Download</span><span class="lang-ar">تحميل</span></a>
+            <a href="{{ url_for('documents.versions', doc_id=document.id) }}" class="btn btn-secondary"><span class="lang-en">Versions</span><span class="lang-ar">الإصدارات</span> ({{ document.current_version }})</a>
+            {% if current_user.id == document.author_id or current_user.is_admin %}
+                <a href="{{ url_for('documents.edit', doc_id=document.id) }}" class="btn btn-secondary"><span class="lang-en">Edit</span><span class="lang-ar">تعديل</span></a>
+                <a href="{{ url_for('documents.manage_access', doc_id=document.id) }}" class="btn btn-secondary"><span class="lang-en">Manage Access</span><span class="lang-ar">إدارة الوصول</span></a>
+                {% if not document.is_deleted %}
+                <form method="POST" action="{{ url_for('documents.delete', doc_id=document.id) }}" class="inline-form" onsubmit="return confirm('Are you sure you want to delete this document?');">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-danger"><span class="lang-en">Delete</span><span class="lang-ar">حذف</span></button>
+                </form>
+                {% else %}
+                {% if current_user.is_admin %}
+                <form method="POST" action="{{ url_for('documents.restore', doc_id=document.id) }}" class="inline-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    <button type="submit" class="btn btn-success"><span class="lang-en">Restore</span><span class="lang-ar">استعادة</span></button>
+                </form>
+                {% endif %}
+                {% endif %}
+            {% endif %}
+        </div>
+    </div>
+
+    {% if document.is_deleted %}
+    <div class="alert alert-danger"><span class="lang-en">This document has been marked as deleted.</span><span class="lang-ar">تم تحديد هذه الوثيقة كمحذوفة.</span></div>
+    {% endif %}
+
+    <div class="document-info-grid">
+        <div class="info-item">
+            <label><span class="lang-en">Classification:</span><span class="lang-ar">التصنيف:</span></label>
+            <span class="classification-badge {{ document.classification_css }}">
+                {{ document.classification_string or document.classification_display }}
+            </span>
+        </div>
+        <div class="info-item">
+            <label><span class="lang-en">Author:</span><span class="lang-ar">المؤلف:</span></label>
+            <span>{{ document.author.username }}</span>
+        </div>
+        <div class="info-item">
+            <label><span class="lang-en">File:</span><span class="lang-ar">الملف:</span></label>
+            <span>{{ document.file_name }} ({{ (document.file_size / 1024)|round(1) }} KB)</span>
+        </div>
+        <div class="info-item">
+            <label><span class="lang-en">Version:</span><span class="lang-ar">الإصدار:</span></label>
+            <span>{{ document.current_version }}</span>
+        </div>
+        <div class="info-item">
+            <label><span class="lang-en">Created:</span><span class="lang-ar">تاريخ الإنشاء:</span></label>
+            <span>{{ document.created_at.strftime('%Y-%m-%d %H:%M UTC') }}</span>
+        </div>
+        <div class="info-item">
+            <label><span class="lang-en">Last Modified:</span><span class="lang-ar">آخر تعديل:</span></label>
+            <span>{{ document.updated_at.strftime('%Y-%m-%d %H:%M UTC') }}</span>
+        </div>
+        <div class="info-item">
+            <label>SHA-256:</label>
+            <span class="hash-display">{{ document.file_hash }}</span>
+        </div>
+        {% if document.compartments %}
+        <div class="info-item">
+            <label><span class="lang-en">Compartments:</span><span class="lang-ar">الأقسام:</span></label>
+            <span>
+                {% for comp in document.compartments %}
+                <span class="badge badge-compartment">{{ comp.name }}</span>
+                {% endfor %}
+            </span>
+        </div>
+        {% endif %}
+        {% if document.dissemination_controls %}
+        <div class="info-item">
+            <label><span class="lang-en">Dissemination:</span><span class="lang-ar">النشر:</span></label>
+            <span>
+                {% for dc in document.dissemination_controls %}
+                <span class="badge badge-dissemination">{{ dc.control }}</span>
+                {% endfor %}
+            </span>
+        </div>
+        {% endif %}
+    </div>
+
+    {% if document.description %}
+    <div class="document-description">
+        <h3><span class="lang-en">Description</span><span class="lang-ar">الوصف</span></h3>
+        <p>{{ document.description }}</p>
+    </div>
+    {% endif %}
+
+    {% if document.access_list_entries %}
+    <div class="document-access-list">
+        <h3><span class="lang-en">Need-to-Know Access List</span><span class="lang-ar">قائمة الوصول حسب الحاجة</span></h3>
+        <ul>
+            {% for entry in document.access_list_entries %}
+            <li>{{ entry.user.username }} (<span class="lang-en">granted</span><span class="lang-ar">منح بتاريخ</span> {{ entry.granted_at.strftime('%Y-%m-%d') }})</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+</div>
+
+{{ classification_banner(document.classification_level, document.classification_string) }}
+{% endblock %}

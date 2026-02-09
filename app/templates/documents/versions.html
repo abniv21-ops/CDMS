@@ -1,0 +1,43 @@
+{% extends "base_app.html" %}
+{% from "_classification_banner.html" import classification_banner %}
+
+{% block title %}Versions: {{ document.title }}{% endblock %}
+
+{% block content %}
+{{ classification_banner(document.classification_level, document.classification_string) }}
+
+<div class="page-header">
+    <h1><span class="lang-en">Version History</span><span class="lang-ar">سجل الإصدارات</span></h1>
+    <p class="text-muted">{{ document.title }}</p>
+    <a href="{{ url_for('documents.detail', doc_id=document.id) }}" class="btn btn-secondary"><span class="lang-en">Back to Document</span><span class="lang-ar">العودة للوثيقة</span></a>
+</div>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th><span class="lang-en">Version</span><span class="lang-ar">الإصدار</span></th>
+            <th><span class="lang-en">Classification</span><span class="lang-ar">التصنيف</span></th>
+            <th><span class="lang-en">Change Summary</span><span class="lang-ar">ملخص التغيير</span></th>
+            <th><span class="lang-en">Created By</span><span class="lang-ar">بواسطة</span></th>
+            <th><span class="lang-en">Date</span><span class="lang-ar">التاريخ</span></th>
+            <th><span class="lang-en">File Hash</span><span class="lang-ar">بصمة الملف</span></th>
+            <th><span class="lang-en">Actions</span><span class="lang-ar">الإجراءات</span></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for version in versions %}
+        <tr>
+            <td>v{{ version.version_number }}{% if version.version_number == document.current_version %} <span class="badge badge-current"><span class="lang-en">Current</span><span class="lang-ar">الحالي</span></span>{% endif %}</td>
+            <td><span class="classification-badge {{ 'top-secret' if version.classification_level == 3 else ('secret' if version.classification_level == 2 else ('confidential' if version.classification_level == 1 else 'unclassified')) }}">{{ version.classification_string }}</span></td>
+            <td>{{ version.change_summary or '-' }}</td>
+            <td>{{ version.creator.username }}</td>
+            <td>{{ version.created_at.strftime('%Y-%m-%d %H:%M') }}</td>
+            <td class="hash-display">{{ version.file_hash[:16] }}...</td>
+            <td>
+                <a href="{{ url_for('documents.version_download', doc_id=document.id, version_num=version.version_number) }}" class="btn btn-sm btn-primary"><span class="lang-en">Download</span><span class="lang-ar">تحميل</span></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

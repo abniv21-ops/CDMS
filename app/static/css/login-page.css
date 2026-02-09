@@ -1,0 +1,275 @@
+/* ============================================================
+   Login Page — Full-Viewport Split Layout
+   ============================================================ */
+
+.login-page {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: var(--gray-100);
+}
+
+.login-split {
+    display: flex;
+    flex: 1;
+}
+
+/* === Left Panel: Navy Branding === */
+.login-left {
+    width: 42%;
+    background: linear-gradient(165deg, var(--navy-dark) 0%, var(--navy) 50%, var(--navy-light) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 60px 48px;
+    position: relative;
+    overflow: hidden;
+    color: var(--white);
+    text-align: center;
+}
+
+/* Star pattern overlay */
+.login-left::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+        radial-gradient(1px 1px at 10% 15%, rgba(197,164,78,0.3) 1px, transparent 0),
+        radial-gradient(1px 1px at 30% 45%, rgba(197,164,78,0.2) 1px, transparent 0),
+        radial-gradient(1px 1px at 50% 20%, rgba(197,164,78,0.25) 1px, transparent 0),
+        radial-gradient(1px 1px at 70% 60%, rgba(197,164,78,0.2) 1px, transparent 0),
+        radial-gradient(1px 1px at 85% 35%, rgba(197,164,78,0.3) 1px, transparent 0),
+        radial-gradient(1px 1px at 15% 75%, rgba(197,164,78,0.2) 1px, transparent 0),
+        radial-gradient(1px 1px at 60% 80%, rgba(197,164,78,0.25) 1px, transparent 0),
+        radial-gradient(1px 1px at 90% 85%, rgba(197,164,78,0.2) 1px, transparent 0),
+        radial-gradient(1px 1px at 40% 90%, rgba(197,164,78,0.15) 1px, transparent 0),
+        radial-gradient(1.5px 1.5px at 25% 30%, rgba(255,255,255,0.08) 1px, transparent 0),
+        radial-gradient(1.5px 1.5px at 75% 50%, rgba(255,255,255,0.06) 1px, transparent 0);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.login-left > * { position: relative; z-index: 1; }
+
+.login-left .seal-container {
+    margin-bottom: 32px;
+}
+
+.login-left .gov-title {
+    font-family: var(--font-heading);
+    font-size: 0.9rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+}
+
+.login-left .system-name {
+    font-family: var(--font-heading);
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 6px;
+    line-height: 1.2;
+}
+
+.login-left .system-abbr {
+    font-family: var(--font-mono);
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: 12px;
+    color: var(--gold);
+    margin-top: 12px;
+    margin-bottom: 32px;
+    position: relative;
+    display: inline-block;
+    padding: 0 6px;
+}
+.login-left .system-abbr::before,
+.login-left .system-abbr::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 40px;
+    height: 1px;
+    background: var(--gold-dark);
+}
+.login-left .system-abbr::before { right: 100%; margin-right: 12px; }
+.login-left .system-abbr::after  { left: 100%; margin-left: 12px; }
+
+.login-left .monitor-notice {
+    font-size: 0.78rem;
+    color: rgba(255,255,255,0.5);
+    font-style: italic;
+    max-width: 280px;
+    line-height: 1.5;
+}
+
+/* === Right Panel: Form === */
+.login-right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 48px;
+    background: var(--gray-50);
+}
+
+.login-security-warning {
+    background: var(--warning-light);
+    border-left: 4px solid var(--warning);
+    padding: 14px 18px;
+    margin-bottom: 28px;
+    max-width: 460px;
+    width: 100%;
+    font-size: 0.8rem;
+    color: var(--gray-700);
+    line-height: 1.6;
+}
+.login-security-warning strong {
+    color: var(--warning);
+    display: block;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 1px;
+}
+
+.login-form-card {
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-top: 4px solid var(--navy);
+    padding: 36px;
+    max-width: 460px;
+    width: 100%;
+    box-shadow: var(--shadow-md);
+}
+
+.login-form-card h2 {
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    color: var(--navy);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.login-form-card h2 .star {
+    color: var(--gold);
+    font-size: 1rem;
+}
+
+.login-form-card .btn-gold {
+    margin-top: 6px;
+    padding: 10px 18px;
+    font-size: 0.9rem;
+}
+
+.login-form-card .auth-link {
+    margin-top: 20px;
+}
+
+/* === Register page variant === */
+.register-form-card {
+    max-width: 500px;
+}
+
+/* === Demo Credentials Box === */
+.demo-credentials {
+    margin-top: 16px;
+    max-width: 460px;
+    width: 100%;
+    background: #fff;
+    border: 1px solid var(--gray-200);
+    border-left: 4px solid var(--gold);
+    padding: 14px 18px;
+    font-size: 0.82rem;
+    color: var(--gray-700);
+}
+.demo-credentials .demo-title {
+    color: var(--navy);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: block;
+    margin-bottom: 6px;
+}
+.demo-credentials .demo-label {
+    font-family: var(--font-mono);
+    color: var(--gray-600);
+}
+
+/* === Dark Mode === */
+[data-theme="dark"] .login-page {
+    background: var(--gray-50);
+}
+[data-theme="dark"] .login-right {
+    background: var(--gray-50);
+}
+[data-theme="dark"] .login-form-card {
+    background: var(--gray-100);
+    border-color: var(--gray-300);
+    border-top-color: var(--gold);
+}
+[data-theme="dark"] .login-form-card h2 {
+    color: var(--gold-light);
+}
+[data-theme="dark"] .login-form-card .form-control {
+    background: var(--gray-200);
+    color: var(--gray-800);
+    border-color: var(--gray-300);
+}
+[data-theme="dark"] .login-form-card .form-control:focus {
+    border-color: var(--gold);
+}
+[data-theme="dark"] .login-form-card .form-label {
+    color: var(--gray-600);
+}
+[data-theme="dark"] .login-form-card .auth-link {
+    color: var(--gray-600);
+}
+[data-theme="dark"] .login-form-card .auth-link a {
+    color: var(--gold);
+}
+[data-theme="dark"] .login-security-warning {
+    background: rgba(251,191,36,0.1);
+    border-left-color: #fbbf24;
+    color: var(--gray-700);
+}
+[data-theme="dark"] .login-security-warning strong {
+    color: #fbbf24;
+}
+/* Demo credentials box */
+[data-theme="dark"] .demo-credentials {
+    background: var(--gray-100);
+    border-color: var(--gray-300);
+    color: var(--gray-700);
+}
+[data-theme="dark"] .demo-credentials .demo-title {
+    color: var(--gold);
+}
+[data-theme="dark"] .demo-credentials .demo-label {
+    color: var(--gray-500);
+}
+[data-theme="dark"] .demo-credentials strong {
+    color: var(--gray-800);
+}
+
+/* === Responsive === */
+@media (max-width: 900px) {
+    .login-split {
+        flex-direction: column;
+    }
+    .login-left {
+        width: 100%;
+        padding: 40px 24px;
+    }
+    .login-left .system-name { font-size: 1.3rem; }
+    .login-left .system-abbr { font-size: 1.2rem; letter-spacing: 8px; }
+    .login-right {
+        padding: 32px 20px;
+    }
+}

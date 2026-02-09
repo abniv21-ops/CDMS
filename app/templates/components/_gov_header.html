@@ -1,0 +1,31 @@
+{% from "components/_seal.html" import gov_seal_mini %}
+
+<!-- Official Bar -->
+<div class="official-bar">
+    <span class="flag-icon">&#127482;&#127480;</span>
+    <span class="lang-en">An official system of the United States Government</span><span class="lang-ar">نظام رسمي للحكومة الأمريكية</span>
+</div>
+
+<!-- Government Header -->
+<header class="gov-header">
+    <div class="gov-header-brand">
+        {{ gov_seal_mini(36) }}
+        <div class="brand-text">
+            CDMS <span>&#8212; <span class="lang-en">Classified Documents</span><span class="lang-ar">الوثائق المصنفة</span></span>
+        </div>
+    </div>
+    <div class="gov-header-right">
+        {% if current_user.is_authenticated %}
+        <div class="gov-header-user">
+            <span class="username">{{ current_user.username }}</span>
+            <span class="classification-badge {{ ClassificationLevel(current_user.clearance_level).css_class }}">
+                {{ current_user.clearance_display }}
+            </span>
+            <span class="badge badge-role">{{ current_user.role|upper }}</span>
+        </div>
+        <button class="lang-toggle" id="langToggle" title="Toggle language" aria-label="Toggle language">AR</button>
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode">&#9790;</button>
+        <a href="{{ url_for('auth.logout') }}" class="logout-btn"><span class="lang-en">Logout</span><span class="lang-ar">خروج</span></a>
+        {% endif %}
+    </div>
+</header>

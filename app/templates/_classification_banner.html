@@ -1,0 +1,9 @@
+{% macro classification_banner(level, classification_string) %}
+{% if level is defined %}
+{% set css_map = {0: 'unclassified', 1: 'confidential', 2: 'secret', 3: 'top-secret'} %}
+{% set name_map = {0: 'UNCLASSIFIED', 1: 'CONFIDENTIAL', 2: 'SECRET', 3: 'TOP SECRET'} %}
+<div class="classification-banner {{ css_map.get(level, 'unclassified') }}">
+    {{ classification_string or name_map.get(level, 'UNCLASSIFIED') }}
+</div>
+{% endif %}
+{% endmacro %}

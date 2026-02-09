@@ -1,0 +1,77 @@
+{% extends "base_app.html" %}
+
+{% block title %}Manage Access: {{ document.title }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><span class="lang-en">Manage Access</span><span class="lang-ar">إدارة الوصول</span></h1>
+    <p class="text-muted">{{ document.title }} &mdash; {{ document.classification_string or document.classification_display }}</p>
+    <a href="{{ url_for('documents.detail', doc_id=document.id) }}" class="btn btn-secondary"><span class="lang-en">Back to Document</span><span class="lang-ar">العودة للوثيقة</span></a>
+</div>
+
+<div class="access-management">
+    <div class="section">
+        <h2><span class="lang-en">Current Access List (Need-to-Know)</span><span class="lang-ar">قائمة الوصول الحالية (حسب الحاجة)</span></h2>
+        {% if access_list %}
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th><span class="lang-en">User</span><span class="lang-ar">المستخدم</span></th>
+                    <th><span class="lang-en">Granted At</span><span class="lang-ar">تاريخ المنح</span></th>
+                    <th><span class="lang-en">Granted By</span><span class="lang-ar">منح بواسطة</span></th>
+                    <th><span class="lang-en">Action</span><span class="lang-ar">الإجراء</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in access_list %}
+                <tr>
+                    <td>{{ entry.user.username }}</td>
+                    <td>{{ entry.granted_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                    <td>{{ entry.granter.username if entry.granter else 'System' }}</td>
+                    <td>
+                        <form method="POST" class="inline-form" onsubmit="return confirm('Revoke access for {{ entry.user.username }}?');">
+                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                            <input type="hidden" name="action" value="revoke">
+                            <input type="hidden" name="user_id" value="{{ entry.user_id }}">
+                            <button type="submit" class="btn btn-sm btn-danger"><span class="lang-en">Revoke</span><span class="lang-ar">إلغاء</span></button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="text-muted"><span class="lang-en">No access list set. All users with appropriate clearance and compartment access can view this document.</span><span class="lang-ar">لم يتم تعيين قائمة وصول. جميع المستخدمين ذوي التصريح والأقسام المناسبة يمكنهم عرض هذه الوثيقة.</span></p>
+        {% endif %}
+    </div>
+
+    <div class="section">
+        <h2><span class="lang-en">Grant Access</span><span class="lang-ar">منح الوصول</span></h2>
+        <form method="POST" class="form-inline">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="action" value="grant">
+            <div class="form-group">
+                <select name="user_id" class="form-select" required>
+                    <option value=""><span class="lang-en">Select User...</span></option>
+                    {% for user in all_users %}
+                    {% if user.id != current_user.id %}
+                    <option value="{{ user.id }}">{{ user.username }} ({{ user.clearance_display }} / {{ user.role }})</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary"><span class="lang-en">Grant Access</span><span class="lang-ar">منح الوصول</span></button>
+        </form>
+    </div>
+
+    <div class="section info-box">
+        <h3><span class="lang-en">How Access Control Works</span><span class="lang-ar">كيف يعمل التحكم في الوصول</span></h3>
+        <p><span class="lang-en">A user must pass <strong>all three checks</strong> to access this document:</span><span class="lang-ar">يجب على المستخدم اجتياز <strong>الفحوصات الثلاثة</strong> للوصول إلى هذه الوثيقة:</span></p>
+        <ol>
+            <li><strong><span class="lang-en">Clearance Level:</span><span class="lang-ar">مستوى التصريح:</span></strong> <span class="lang-en">User's clearance must be at or above {{ document.classification_display }}</span><span class="lang-ar">يجب أن يكون تصريح المستخدم عند أو أعلى من {{ document.classification_display }}</span></li>
+            <li><strong><span class="lang-en">Compartment Access:</span><span class="lang-ar">الوصول للأقسام:</span></strong> <span class="lang-en">User must have access to all compartments on this document</span><span class="lang-ar">يجب أن يكون لدى المستخدم وصول لجميع أقسام هذه الوثيقة</span></li>
+            <li><strong><span class="lang-en">Need-to-Know:</span><span class="lang-ar">الحاجة للمعرفة:</span></strong> <span class="lang-en">If an access list exists (above), user must be on it (admins exempt)</span><span class="lang-ar">إذا كانت قائمة الوصول موجودة (أعلاه)، يجب أن يكون المستخدم فيها (المسؤولون مستثنون)</span></li>
+        </ol>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends "base_app.html" %}
+
+{% block title %}Manage Users{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><span class="lang-en">User Management</span><span class="lang-ar">إدارة المستخدمين</span></h1>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary"><span class="lang-en">Back to Dashboard</span><span class="lang-ar">العودة للوحة التحكم</span></a>
+</div>
+
+<table class="data-table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th><span class="lang-en">Username</span><span class="lang-ar">اسم المستخدم</span></th>
+            <th><span class="lang-en">Email</span><span class="lang-ar">البريد الإلكتروني</span></th>
+            <th><span class="lang-en">Role</span><span class="lang-ar">الدور</span></th>
+            <th><span class="lang-en">Clearance</span><span class="lang-ar">التصريح</span></th>
+            <th><span class="lang-en">Status</span><span class="lang-ar">الحالة</span></th>
+            <th><span class="lang-en">Compartments</span><span class="lang-ar">الأقسام</span></th>
+            <th><span class="lang-en">Actions</span><span class="lang-ar">الإجراءات</span></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr class="{% if not user.is_active %}row-inactive{% endif %}">
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td><span class="badge badge-role">{{ user.role|upper }}</span></td>
+            <td>
+                <span class="classification-badge {{ ClassificationLevel(user.clearance_level).css_class }}">
+                    {{ user.clearance_display }}
+                </span>
+            </td>
+            <td>
+                {% if user.is_locked %}
+                    <span class="badge badge-locked">LOCKED</span>
+                {% elif user.is_active %}
+                    <span class="badge badge-active"><span class="lang-en">Active</span><span class="lang-ar">نشط</span></span>
+                {% else %}
+                    <span class="badge badge-inactive"><span class="lang-en">Inactive</span><span class="lang-ar">غير نشط</span></span>
+                {% endif %}
+            </td>
+            <td>
+                {% set comps = user.compartments.all() %}
+                {% if comps %}
+                    {% for c in comps %}
+                    <span class="badge badge-compartment">{{ c.name }}</span>
+                    {% endfor %}
+                {% else %}
+                    <span class="text-muted"><span class="lang-en">None</span><span class="lang-ar">لا يوجد</span></span>
+                {% endif %}
+            </td>
+            <td class="action-buttons">
+                <a href="{{ url_for('admin.user_edit', user_id=user.id) }}" class="btn btn-sm btn-secondary"><span class="lang-en">Edit</span><span class="lang-ar">تعديل</span></a>
+                <a href="{{ url_for('admin.user_compartments_view', user_id=user.id) }}" class="btn btn-sm btn-secondary"><span class="lang-en">Compartments</span><span class="lang-ar">الأقسام</span></a>
+                {% if user.id != current_user.id %}
+                <form method="POST" action="{{ url_for('admin.user_deactivate', user_id=user.id) }}" class="inline-form">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                    {% if user.is_active %}
+                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Deactivate {{ user.username }}?');"><span class="lang-en">Deactivate</span><span class="lang-ar">تعطيل</span></button>
+                    {% else %}
+                    <button type="submit" class="btn btn-sm btn-success"><span class="lang-en">Activate</span><span class="lang-ar">تفعيل</span></button>
+                    {% endif %}
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

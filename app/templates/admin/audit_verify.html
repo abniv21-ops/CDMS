@@ -1,0 +1,51 @@
+{% extends "base_app.html" %}
+
+{% block title %}Audit Chain Verification{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><span class="lang-en">Audit Log Integrity Verification</span><span class="lang-ar">التحقق من سلامة سجل التدقيق</span></h1>
+    <a href="{{ url_for('audit.log_viewer') }}" class="btn btn-secondary"><span class="lang-en">Back to Audit Log</span><span class="lang-ar">العودة لسجل التدقيق</span></a>
+</div>
+
+<div class="verification-result {% if is_valid %}verification-pass{% else %}verification-fail{% endif %}">
+    {% if is_valid %}
+    <div class="verification-icon">&#10004;</div>
+    <h2><span class="lang-en">INTEGRITY CHECK PASSED</span><span class="lang-ar">اجتاز فحص السلامة</span></h2>
+    <p><span class="lang-en">All {{ total }} audit log entries have valid hash chains. No tampering detected.</span><span class="lang-ar">جميع سجلات التدقيق البالغ عددها {{ total }} تمتلك سلاسل بصمات صالحة. لم يتم اكتشاف تلاعب.</span></p>
+    {% else %}
+    <div class="verification-icon">&#10008;</div>
+    <h2><span class="lang-en">INTEGRITY CHECK FAILED</span><span class="lang-ar">فشل فحص السلامة</span></h2>
+    <p><span class="lang-en">Checked {{ total }} entries. Found {{ errors|length }} integrity error(s).</span><span class="lang-ar">تم فحص {{ total }} سجل. تم العثور على {{ errors|length }} خطأ (أخطاء) في السلامة.</span></p>
+    {% endif %}
+</div>
+
+{% if errors %}
+<div class="section">
+    <h3><span class="lang-en">Errors Found</span><span class="lang-ar">الأخطاء الموجودة</span></h3>
+    <table class="data-table">
+        <thead>
+            <tr>
+                <th><span class="lang-en">Entry ID</span><span class="lang-ar">رقم السجل</span></th>
+                <th><span class="lang-en">Error</span><span class="lang-ar">الخطأ</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for error in errors %}
+            <tr>
+                <td>{{ error.id }}</td>
+                <td class="text-danger">{{ error.error }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+<div class="info-box">
+    <h3><span class="lang-en">How Hash Chain Verification Works</span><span class="lang-ar">كيف يعمل التحقق من سلسلة البصمات</span></h3>
+    <p><span class="lang-en">Each audit log entry contains a SHA-256 hash computed over its own data fields plus the hash of the previous entry.
+    This creates a tamper-evident chain where modifying any entry would invalidate all subsequent hashes.</span><span class="lang-ar">يحتوي كل سجل تدقيق على بصمة SHA-256 محسوبة من حقول بياناته مع بصمة السجل السابق.
+    هذا ينشئ سلسلة مقاومة للتلاعب حيث يؤدي تعديل أي سجل إلى إبطال جميع البصمات اللاحقة.</span></p>
+</div>
+{% endblock %}

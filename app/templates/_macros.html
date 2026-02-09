@@ -1,0 +1,56 @@
+{% macro render_field(field) %}
+<div class="form-group {% if field.errors %}has-error{% endif %}">
+    {{ field.label(class="form-label") }}
+    {{ field(class="form-control") }}
+    {% if field.errors %}
+        {% for error in field.errors %}
+            <span class="form-error">{{ error }}</span>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% macro render_select(field) %}
+<div class="form-group {% if field.errors %}has-error{% endif %}">
+    {{ field.label(class="form-label") }}
+    {{ field(class="form-select") }}
+    {% if field.errors %}
+        {% for error in field.errors %}
+            <span class="form-error">{{ error }}</span>
+        {% endfor %}
+    {% endif %}
+</div>
+{% endmacro %}
+
+{% macro render_checkbox(field) %}
+<div class="form-group form-check">
+    {{ field(class="form-check-input") }}
+    {{ field.label(class="form-check-label") }}
+</div>
+{% endmacro %}
+
+{% macro classification_badge(level, css_class) %}
+<span class="classification-badge {{ css_class }}">{{ level }}</span>
+{% endmacro %}
+
+{% macro pagination_widget(pagination) %}
+{% if pagination and pagination.pages > 1 %}
+<nav class="pagination">
+    {% if pagination.has_prev %}
+        <a href="?page={{ pagination.prev_num }}" class="page-link">&laquo; <span class="lang-en">Prev</span><span class="lang-ar">السابق</span></a>
+    {% endif %}
+    {% for page_num in pagination.iter_pages(left_edge=1, right_edge=1, left_current=2, right_current=2) %}
+        {% if page_num %}
+            <a href="?page={{ page_num }}" class="page-link {% if page_num == pagination.page %}active{% endif %}">
+                {{ page_num }}
+            </a>
+        {% else %}
+            <span class="page-ellipsis">&hellip;</span>
+        {% endif %}
+    {% endfor %}
+    {% if pagination.has_next %}
+        <a href="?page={{ pagination.next_num }}" class="page-link"><span class="lang-en">Next</span><span class="lang-ar">التالي</span> &raquo;</a>
+    {% endif %}
+</nav>
+{% endif %}
+{% endmacro %}

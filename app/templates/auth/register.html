@@ -1,0 +1,61 @@
+{% extends "base_auth.html" %}
+{% from "_macros.html" import render_field %}
+{% from "components/_seal.html" import gov_seal %}
+
+{% block title %}Register{% endblock %}
+
+{% block auth_content %}
+<div class="login-split">
+    <!-- Left: Navy Branding Panel -->
+    <div class="login-left">
+        <div class="seal-container">
+            {{ gov_seal(140) }}
+        </div>
+        <div class="gov-title"><span class="lang-en">United States Government</span><span class="lang-ar">حكومة الولايات المتحدة</span></div>
+        <div class="system-name"><span class="lang-en">Classified Documents<br>Management System</span><span class="lang-ar">نظام إدارة<br>الوثائق المصنفة</span></div>
+        <div class="system-abbr">CDMS</div>
+        <div class="monitor-notice">
+            <span class="lang-en">&ldquo;All access to this system is monitored, recorded, and subject to audit.&rdquo;</span><span class="lang-ar">&ldquo;جميع عمليات الوصول إلى هذا النظام مراقبة ومسجلة وخاضعة للتدقيق.&rdquo;</span>
+        </div>
+    </div>
+
+    <!-- Right: Register Form Panel -->
+    <div class="login-right">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" style="max-width:500px;width:100%;margin-bottom:12px;">
+                        {{ message }}
+                        <button class="alert-close" onclick="this.parentElement.remove()">&times;</button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="login-form-card register-form-card">
+            <h2><span class="star">&#9733;</span> <span class="lang-en">Create Account</span><span class="lang-ar">إنشاء حساب</span></h2>
+
+            <form method="POST" action="{{ url_for('auth.register') }}">
+                {{ form.hidden_tag() }}
+                {{ render_field(form.username) }}
+                {{ render_field(form.email) }}
+                {{ render_field(form.password) }}
+                {{ render_field(form.password2) }}
+                <div class="form-group">
+                    {{ form.submit(class="btn btn-gold btn-block") }}
+                </div>
+            </form>
+
+            <p class="auth-link">
+                <span class="lang-en">Already have an account? <a href="{{ url_for('auth.login') }}">Sign in</a></span><span class="lang-ar">لديك حساب بالفعل؟ <a href="{{ url_for('auth.login') }}">تسجيل الدخول</a></span>
+            </p>
+
+            <div class="auth-info">
+                <strong><span class="lang-en">Note:</span><span class="lang-ar">ملاحظة:</span></strong> <span class="lang-en">New accounts are created with UNCLASSIFIED clearance and Viewer role.
+                Contact an administrator to request elevated access.</span><span class="lang-ar">يتم إنشاء الحسابات الجديدة بتصريح غير مصنف ودور مُشاهد.
+                تواصل مع المسؤول لطلب صلاحيات أعلى.</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

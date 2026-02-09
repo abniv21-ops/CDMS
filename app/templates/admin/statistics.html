@@ -1,0 +1,90 @@
+{% extends "base_app.html" %}
+
+{% block title %}System Statistics{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h1><span class="lang-en">System Statistics</span><span class="lang-ar">إحصائيات النظام</span></h1>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-secondary"><span class="lang-en">Back to Dashboard</span><span class="lang-ar">العودة للوحة التحكم</span></a>
+</div>
+
+<div class="stats-sections">
+    <div class="stats-section">
+        <h2><span class="lang-en">Users</span><span class="lang-ar">المستخدمون</span></h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{ total_users }}</div>
+                <div class="stat-label"><span class="lang-en">Total Users</span><span class="lang-ar">إجمالي المستخدمين</span></div>
+            </div>
+            {% for role, count in users_by_role.items() %}
+            <div class="stat-card">
+                <div class="stat-value">{{ count }}</div>
+                <div class="stat-label">{{ role }}</div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <h3><span class="lang-en">Users by Clearance Level</span><span class="lang-ar">المستخدمون حسب مستوى التصريح</span></h3>
+        <div class="classification-stats">
+            {% for level, count in users_by_clearance.items() %}
+            <div class="class-stat-row">
+                <span class="classification-badge {{ level|lower|replace(' ', '-') }}">{{ level }}</span>
+                <div class="stat-bar">
+                    <div class="stat-bar-fill" style="width: {{ (count / total_users * 100) if total_users > 0 else 0 }}%"></div>
+                </div>
+                <span class="stat-count">{{ count }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="stats-section">
+        <h2><span class="lang-en">Documents</span><span class="lang-ar">الوثائق</span></h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{ active_docs }}</div>
+                <div class="stat-label"><span class="lang-en">Active Documents</span><span class="lang-ar">الوثائق النشطة</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ deleted_docs }}</div>
+                <div class="stat-label"><span class="lang-en">Deleted Documents</span><span class="lang-ar">الوثائق المحذوفة</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ total_docs }}</div>
+                <div class="stat-label"><span class="lang-en">Total (incl. deleted)</span><span class="lang-ar">الإجمالي (شامل المحذوف)</span></div>
+            </div>
+        </div>
+
+        <h3><span class="lang-en">Documents by Classification</span><span class="lang-ar">الوثائق حسب التصنيف</span></h3>
+        <div class="classification-stats">
+            {% for level, count in docs_by_class.items() %}
+            <div class="class-stat-row">
+                <span class="classification-badge {{ level|lower|replace(' ', '-') }}">{{ level }}</span>
+                <div class="stat-bar">
+                    <div class="stat-bar-fill" style="width: {{ (count / active_docs * 100) if active_docs > 0 else 0 }}%"></div>
+                </div>
+                <span class="stat-count">{{ count }}</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="stats-section">
+        <h2><span class="lang-en">Security</span><span class="lang-ar">الأمان</span></h2>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{ total_audit }}</div>
+                <div class="stat-label"><span class="lang-en">Total Audit Entries</span><span class="lang-ar">إجمالي سجلات التدقيق</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ recent_logins }}</div>
+                <div class="stat-label"><span class="lang-en">Successful Logins</span><span class="lang-ar">عمليات الدخول الناجحة</span></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ failed_logins }}</div>
+                <div class="stat-label"><span class="lang-en">Failed Logins</span><span class="lang-ar">عمليات الدخول الفاشلة</span></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
