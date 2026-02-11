@@ -202,62 +202,6 @@
     color: var(--gray-600);
 }
 
-/* === Dark Mode === */
-[data-theme="dark"] .login-page {
-    background: var(--gray-50);
-}
-[data-theme="dark"] .login-right {
-    background: var(--gray-50);
-}
-[data-theme="dark"] .login-form-card {
-    background: var(--gray-100);
-    border-color: var(--gray-300);
-    border-top-color: var(--gold);
-}
-[data-theme="dark"] .login-form-card h2 {
-    color: var(--gold-light);
-}
-[data-theme="dark"] .login-form-card .form-control {
-    background: var(--gray-200);
-    color: var(--gray-800);
-    border-color: var(--gray-300);
-}
-[data-theme="dark"] .login-form-card .form-control:focus {
-    border-color: var(--gold);
-}
-[data-theme="dark"] .login-form-card .form-label {
-    color: var(--gray-600);
-}
-[data-theme="dark"] .login-form-card .auth-link {
-    color: var(--gray-600);
-}
-[data-theme="dark"] .login-form-card .auth-link a {
-    color: var(--gold);
-}
-[data-theme="dark"] .login-security-warning {
-    background: rgba(251,191,36,0.1);
-    border-left-color: #fbbf24;
-    color: var(--gray-700);
-}
-[data-theme="dark"] .login-security-warning strong {
-    color: #fbbf24;
-}
-/* Demo credentials box */
-[data-theme="dark"] .demo-credentials {
-    background: var(--gray-100);
-    border-color: var(--gray-300);
-    color: var(--gray-700);
-}
-[data-theme="dark"] .demo-credentials .demo-title {
-    color: var(--gold);
-}
-[data-theme="dark"] .demo-credentials .demo-label {
-    color: var(--gray-500);
-}
-[data-theme="dark"] .demo-credentials strong {
-    color: var(--gray-800);
-}
-
 /* === Responsive === */
 @media (max-width: 900px) {
     .login-split {

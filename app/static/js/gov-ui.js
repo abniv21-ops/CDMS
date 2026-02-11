@@ -2,14 +2,6 @@
    CDMS Government UI — Enhanced JavaScript
    ============================================================ */
 
-// === Theme: apply saved preference before DOMContentLoaded to prevent flash ===
-(function() {
-    var saved = localStorage.getItem('cdms-theme');
-    if (saved === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-    }
-})();
-
 // === Language: apply saved preference before DOMContentLoaded to prevent flash ===
 (function() {
     var lang = localStorage.getItem('cdms-lang') || 'en';
@@ -19,29 +11,6 @@
 })();
 
 document.addEventListener('DOMContentLoaded', function() {
-
-    // === Theme toggle ===
-    var themeBtn = document.getElementById('themeToggle');
-    if (themeBtn) {
-        var isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-        themeBtn.innerHTML = isDark ? '&#9788;' : '&#9790;';
-        themeBtn.title = isDark ? 'Switch to light mode' : 'Switch to dark mode';
-
-        themeBtn.addEventListener('click', function() {
-            var current = document.documentElement.getAttribute('data-theme');
-            if (current === 'dark') {
-                document.documentElement.removeAttribute('data-theme');
-                localStorage.setItem('cdms-theme', 'light');
-                this.innerHTML = '&#9790;';
-                this.title = 'Switch to dark mode';
-            } else {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                localStorage.setItem('cdms-theme', 'dark');
-                this.innerHTML = '&#9788;';
-                this.title = 'Switch to light mode';
-            }
-        });
-    }
 
     // === Language toggle ===
     var langBtn = document.getElementById('langToggle');

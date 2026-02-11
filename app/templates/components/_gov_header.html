@@ -24,8 +24,7 @@
             <span class="badge badge-role">{{ current_user.role|upper }}</span>
         </div>
         <button class="lang-toggle" id="langToggle" title="Toggle language" aria-label="Toggle language">AR</button>
-        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode" aria-label="Toggle dark mode">&#9790;</button>
-        <a href="{{ url_for('auth.logout') }}" class="logout-btn"><span class="lang-en">Logout</span><span class="lang-ar">خروج</span></a>
+<a href="{{ url_for('auth.logout') }}" class="logout-btn"><span class="lang-en">Logout</span><span class="lang-ar">خروج</span></a>
         {% endif %}
     </div>
 </header>

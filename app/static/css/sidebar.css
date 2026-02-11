@@ -139,19 +139,6 @@
     z-index: 999;
 }
 
-/* === Dark Mode === */
-[data-theme="dark"] .sidebar {
-    background: var(--gray-100);
-    border-right-color: var(--gray-300);
-}
-[data-theme="dark"] .sidebar-footer {
-    background: var(--gray-50);
-    border-top-color: var(--gray-300);
-}
-[data-theme="dark"] .sidebar-section {
-    border-bottom-color: var(--gray-300);
-}
-
 @media (max-width: 768px) {
     .sidebar {
         position: fixed;

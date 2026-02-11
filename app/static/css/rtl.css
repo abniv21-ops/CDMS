@@ -172,21 +172,6 @@
     color: var(--navy);
 }
 
-/* === Dark mode combo === */
-[data-theme="dark"] .lang-toggle {
-    border-color: var(--gold-dark);
-    color: var(--gold-light);
-}
-[data-theme="dark"] .lang-toggle:hover {
-    background: var(--gold-dark);
-    color: var(--white);
-}
-
-[data-theme="dark"][data-lang="ar"] .sidebar {
-    border-left-color: var(--gray-300);
-    border-right: none;
-}
-
 /* === Mobile sidebar RTL === */
 @media (max-width: 768px) {
     [data-lang="ar"] .sidebar {
