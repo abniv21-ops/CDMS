@@ -8,10 +8,6 @@ def forbidden(e):
     return render_template('errors/403.html'), 403
 
 
-@errors_bp.app_errorhandler(404)
-def not_found(e):
-    return render_template('errors/404.html'), 404
-
 
 @errors_bp.app_errorhandler(500)
 def internal_error(e):
